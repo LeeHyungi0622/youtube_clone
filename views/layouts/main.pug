@@ -1,11 +1,11 @@
 doctype html
 html
     head
-        title | Wetube
+        //- <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+        link(rel="stylesheet", href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css", integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p", crossorigin="anonymous")
+        title #{pageTitle} | #{siteName}
     body
-        header
-            h1 WeTube
+        include ../partials/header.pug
         main 
             block content
-        footer
-            span &copy; WeTube
+        include ../partials/footer.pug
