@@ -1,49 +1,18 @@
-export const videos = [{
-        id: 324393,
-        title: "Video awesome",
-        description: "This is something I love",
-        views: 24,
-        videoFile: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
-        creator: {
-            id: 121212,
-            name: "Hyungi Lee",
-            email: "mike.hyungi.lee@gmail.com"
-        }
-    },
-    {
-        id: 1212121,
-        title: "Video super",
-        description: "This is something I love",
-        views: 24,
-        videoFile: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
-        creator: {
-            id: 121212,
-            name: "Hyungi Lee",
-            email: "mike.hyungi.lee@gmail.com"
-        }
-    },
-    {
-        id: 55555,
-        title: "Video nice",
-        description: "This is something I love",
-        views: 24,
-        videoFile: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
-        creator: {
-            id: 121212,
-            name: "Hyungi Lee",
-            email: "mike.hyungi.lee@gmail.com"
-        }
-    },
-    {
-        id: 11111,
-        title: "Video perfect",
-        description: "This is something I love",
-        views: 24,
-        videoFile: "https://archive.org/download/BigBuckBunny_124/Content/big_buck_bunny_720p_surround.mp4",
-        creator: {
-            id: 121212,
-            name: "Hyungi Lee",
-            email: "mike.hyungi.lee@gmail.com"
-        }
-    }
-];
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
+// 'mongodb://localhost:포트번호/Database이름'
+mongoose.connect(process.env.MONGO_URL, {
+    // 새로운 버전의 mongoose에서는 이런식으로 configuration을 보낼 수 있다.
+    useNewUrlParser: true,
+    useFindAndModify: false
+});
+
+const db = mongoose.connection;
+
+const handleOpen = () => console.log("connected to DB");
+const handleError = () => console.log(`Error on DB Connection: ${error}`);
+// connection을 열고 성공여부를 확인할 수 있는 function을 입력
+db.once("open", handleOpen);
+db.on("error", handleError);
