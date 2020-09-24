@@ -8,8 +8,9 @@
     "dependencies": {
         "@babel/core": "^7.11.6",
         "@babel/node": "^7.10.5",
+        "@babel/polyfill": "^7.11.5",
         "@babel/preset-env": "^7.11.5",
-        "autoprefixer": "^10.0.0",
+        "babel-loader": "^8.1.0",
         "body-parser": "^1.19.0",
         "cookie-parser": "^1.4.5",
         "css-loader": "^4.3.0",
@@ -20,6 +21,7 @@
         "mongoose": "^5.10.6",
         "morgan": "^1.10.0",
         "multer": "^1.4.2",
+        "node-sass": "^4.14.1",
         "postcss-loader": "^4.0.2",
         "pug": "^3.0.0",
         "sass-loader": "^10.0.2",
@@ -28,16 +30,19 @@
     },
     "scripts": {
         "dev:server": "nodemon --exec babel-node init.js --delay 2",
-        "dev:assets": "WEBPACK_ENV=development webpack",
+        "dev:assets": "WEBPACK_ENV=development webpack -w",
         "build:assets": "WEBPACK_ENV=production webpack"
     },
     "devDependencies": {
+        "autoprefixer": "^10.0.0",
         "eslint": "^7.9.0",
         "eslint-config-airbnb-base": "^14.2.0",
         "eslint-config-prettier": "^6.11.0",
         "eslint-plugin-import": "^2.22.0",
         "eslint-plugin-prettier": "^3.1.4",
+        "mini-css-extract-plugin": "^0.11.2",
         "nodemon": "^2.0.4",
+        "postcss": "^8.0.9",
         "prettier": "^2.1.2"
     }
 }
