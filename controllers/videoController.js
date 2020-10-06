@@ -41,9 +41,13 @@ export const postUpload = async(req, res) => {
     const newVideo = await Video.create({
         fileUrl: path,
         title,
-        description
+        description,
+        creator: req.user.id
     });
-    console.log(newVideo);
+    // user정보 중 videos 리스트에 newVideo의 id에 대한 정보를 push 해주도록 한다.
+    req.user.videos.push(newVideo.id);
+    // 업데이트 된 user 정보를 저장한다.
+    req.user.save();
     res.redirect(routes.videoDetail(newVideo.id));
     // To Do: Upload and save video (video id)
     // res.redirect(routes.videoDetail(324393));
@@ -54,8 +58,7 @@ export const videoDetail = async(req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id);
-        console.log(video);
+        const video = await Video.findById(id).populate("creator");
         res.render("videoDetail", { pageTitle: video.title, video });
     } catch (error) {
         res.redirect(routes.home);
@@ -69,10 +72,13 @@ export const getEditVideo = async(req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id);
-        res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+        const video = await await Video.findById(id);
+        if (video.creator !== req.user.id) {
+            throw Error();
+        } else {
+            res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
+        }
     } catch (error) {
-        console.log(error);
         res.redirect(routes.home);
     }
 };
@@ -86,7 +92,6 @@ export const postEditVideo = async(req, res) => {
         await Video.findOneAndUpdate({ _id: id }, { title, description });
         res.redirect(routes.videoDetail(id));
     } catch (error) {
-        console.log(error);
         res.redirect(routes.home);
     }
 };
@@ -96,7 +101,12 @@ export const deleteVideo = async(req, res) => {
         params: { id }
     } = req;
     try {
-        await Video.findOneAndRemove({ _id: id });
+        const video = await await Video.findById(id);
+        if (video.creator !== req.user.id) {
+            throw Error();
+        } else {
+            await Video.findOneAndRemove({ _id: id });
+        }
     } catch (error) {
         console.log(error);
     }

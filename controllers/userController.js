@@ -125,11 +125,59 @@ export const userDetail = async(req, res) => {
         params: { id }
     } = req;
     try {
-        const user = await User.findById(id);
+        const user = await User.findById(id).populate("videos");
+        // user가 업로드한 video리스트를 보여주기 위한 처리
+        console.log(user);
         res.render("userDetail", { pageTitle: "User Detail", user });
     } catch (error) {
         res.redirect(routes.home);
     }
 };
-export const editProfile = (req, res) => res.render("editProfile");
-export const changePassword = (req, res) => res.render("changePassword");
+
+export const getEditProfile = (req, res) =>
+    res.render("editProfile", { pageTitle: "Edit Profile" });
+
+export const postEditProfile = async(req, res) => {
+    const {
+        body: { name, email },
+        file
+    } = req;
+    // console.log("name, email : ", name, email);
+    try {
+        await User.findByIdAndUpdate(req.user.id, {
+            name,
+            email,
+            // avatar 파일을 업데이트하지 않은 경우, 현재 로그인되어있는 사용자의 avatarUrl로 업데이트한다.
+            avatarUrl: file ? file.path : req.user.avatarUrl
+        });
+        res.redirect(routes.me);
+    } catch (error) {
+        console.log(error);
+        res.redirect("editProfile", { pageTitle: "Edit Profile" });
+    }
+};
+
+export const getChangePassword = (req, res) =>
+    res.render("changePassword", { pageTitle: "Change Password" });
+
+export const postChangePassword = async(req, res) => {
+    const {
+        body: { oldPassword, newPassword, newPassword1 }
+    } = req;
+    try {
+        console.log(oldPassword, newPassword, newPassword1);
+        if (newPassword !== newPassword1) {
+            res.status(400);
+            res.redirect(routes.changePassword);
+            return;
+        }
+        // changePassword 메서드를 사용해서 user의 password를 변경해준다.
+        // changePassword(oldPassword, newPassword, [cb])
+        await req.user.changePassword(oldPassword, newPassword);
+        res.redirect(routes.me);
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+        res.redirect(`/users/${routes.changePassword}`);
+    }
+};

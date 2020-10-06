@@ -29,10 +29,18 @@ const config = {
                         loader: "postcss-loader",
                         options: {
                             postcssOptions: {
-                                browsers: ["cover 99.5%"]
-                                    // plugins: [
-                                    //     ["autoprefixer", { browsers: "cover 99.5%" }]
-                                    // ]
+                                // browsers: ["cover 99.5%"]
+                                // plugins: [
+                                //     ["autoprefixer", { browsers: "cover 99.5%" }]
+                                // ]
+                                plugins: [
+                                    [
+                                        "autoprefixer",
+                                        {
+                                            browsers: ["cover 99.5%"]
+                                        }
+                                    ]
+                                ]
                             }
                         }
                     },
