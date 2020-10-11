@@ -46,13 +46,25 @@
                 width: 100%;
             }
         }
+        .video__comments-list {
+            margin-top: 50px;
+            li {
+                background-color: #3498db;
+                color: white;
+                padding: 15px;
+                border-radius: 20px;
+                border-bottom-left-radius: 0px;
+                &:not(:last-child) {
+                    margin-bottom: 15px;
+                }
+            }
+        }
     }
     .video__player,
     video {
         display: flex;
         justify-content: center;
         width: 100%;
-        max-width: 850px;
     }
     .video__player video {
         width: 100%;

@@ -1,5 +1,6 @@
 import routes from "../routes";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const home = async(req, res) => {
     try {
@@ -58,9 +59,12 @@ export const videoDetail = async(req, res) => {
         params: { id }
     } = req;
     try {
-        const video = await Video.findById(id).populate("creator");
+        const video = await Video.findById(id)
+            .populate("creator")
+            .populate("comments");
         res.render("videoDetail", { pageTitle: video.title, video });
     } catch (error) {
+        console.log(error);
         res.redirect(routes.home);
     }
 };
@@ -111,4 +115,49 @@ export const deleteVideo = async(req, res) => {
         console.log(error);
     }
     res.redirect(routes.home);
+};
+
+// [확인용]
+// Register Video View
+// Video 객체를 찾아서 찾은 Video 객체의 views 숫자를 증가시킨다.
+// database에서 view를 증가시키는 것을 확인하기 위한 function
+export const postRegisterView = async(req, res) => {
+    const {
+        params: { id }
+    } = req;
+    try {
+        const video = await Video.findById(id);
+        video.views += 1;
+        video.save();
+        res.status(200);
+    } catch (error) {
+        res.status(400);
+        res.end();
+    } finally {
+        res.end();
+    }
+};
+
+// Add Comment
+export const postAddComment = async(req, res) => {
+    const {
+        params: { id },
+        body: { comment },
+        user
+    } = req;
+
+    try {
+        const video = await Video.findById(id);
+        const newComment = await Comment.create({
+            text: comment,
+            creator: user.id
+        });
+        video.comments.push(newComment.id);
+        video.save();
+    } catch (error) {
+        console.log(error);
+        res.status(400);
+    } finally {
+        res.end();
+    }
 };
