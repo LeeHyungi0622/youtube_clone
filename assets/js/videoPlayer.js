@@ -81,7 +81,7 @@ const exitFullScreen = () => {
     }
 };
 
-const formatDate = (seconds) => {
+const formatDFfate = (seconds) => {
     const secondsNumber = parseInt(seconds, 10);
     let hours = Math.floor(secondsNumber / 3600);
     let minutes = Math.floor((secondsNumber - hours * 3600) / 60);

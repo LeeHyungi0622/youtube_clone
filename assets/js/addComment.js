@@ -8,6 +8,15 @@ const increaseNumber = () => {
     commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) + 1;
 };
 
+const decreaseNumber = () => {
+    commentNumber.innerHTML = parseInt(commentNumber.innerHTML, 10) - 1;
+};
+
+const deleteComment = (comment) => {
+    // 로그인한 사용자와 comment 작성자가 같다면, X 표시를 보여주고, 클릭하면 작성한 comment를 삭제한다.
+    // axios와 HTML tag를 li에 mongoDB에 저장된 comment id를 넣어서 삭제 처리를 할 수 있도록 한다.
+};
+
 const addComment = (comment) => {
     const li = document.createElement("li");
     const span = document.createElement("span");
