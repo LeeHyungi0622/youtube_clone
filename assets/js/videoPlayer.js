@@ -1,3 +1,5 @@
+import getBlobDuration from "get-blob-duration";
+
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayButton");
@@ -81,7 +83,7 @@ const exitFullScreen = () => {
     }
 };
 
-const formatDFfate = (seconds) => {
+const formatDate = (seconds) => {
     const secondsNumber = parseInt(seconds, 10);
     let hours = Math.floor(secondsNumber / 3600);
     let minutes = Math.floor((secondsNumber - hours * 3600) / 60);
@@ -103,8 +105,10 @@ const getCurrentTime = () => {
     currentTime.innerHTML = formatDate(Math.floor(videoPlayer.currentTime));
 };
 
-const setTotalTime = () => {
-    const totalTimeString = formatDate(videoPlayer.duration);
+const setTotalTime = async() => {
+    const duration = await getBlobDuration(videoPlayer.src);
+    console.log(`Duration : ${duration}`);
+    const totalTimeString = formatDate(duration);
     totalTime.innerHTML = totalTimeString;
     setInterval(getCurrentTime, 1000);
 };

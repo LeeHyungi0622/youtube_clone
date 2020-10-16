@@ -148,7 +148,7 @@ export const postEditProfile = async(req, res) => {
             name,
             email,
             // avatar 파일을 업데이트하지 않은 경우, 현재 로그인되어있는 사용자의 avatarUrl로 업데이트한다.
-            avatarUrl: file ? file.path : req.user.avatarUrl
+            avatarUrl: file ? file.location : req.user.avatarUrl
         });
         res.redirect(routes.me);
     } catch (error) {
