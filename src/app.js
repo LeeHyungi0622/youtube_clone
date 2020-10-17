@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
+import path from "path";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRouter";
@@ -25,8 +26,13 @@ const CookieStore = MongoStore(session);
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.set("view engine", "pug");
-app.use("/uploads", express.static("uploads"));
-app.use("/static", express.static("static"));
+app.set("views", path.join(__dirname, "views"));
+// upload부분은 지우도록 한다. AWS S3에 파일을 업로드하고 있기 때문에 필요없다.
+// app.use("/uploads", express.static("uploads"));
+// 수정전
+// app.use("/static", express.static("static"));
+// 수정후
+app.use("/static", express.static(path.join(__dirname, "static")));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

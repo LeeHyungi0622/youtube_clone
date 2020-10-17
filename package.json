@@ -6,7 +6,8 @@
     "author": "Hyungi Lee",
     "license": "ISC",
     "dependencies": {
-        "@babel/core": "^7.11.6",
+        "@babel/cli": "^7.12.1",
+        "@babel/core": "^7.12.3",
         "@babel/node": "^7.10.5",
         "@babel/polyfill": "^7.11.5",
         "@babel/preset-env": "^7.11.5",
@@ -40,10 +41,16 @@
         "webpack-cli": "^3.3.12"
     },
     "scripts": {
-        "dev:server": "nodemon --exec babel-node init.js --delay 2 --ignore '.scss' --ignore 'static' ",
-        "dev:assets": "WEBPACK_ENV=development webpack -w",
-        "build:assets": "WEBPACK_ENV=production webpack",
-        "tunnel": "lt -h http://serverless.social -p 4000"
+        "dev:server": "nodemon --exec babel-node src/init.js --delay 2 --ignore '.scss' --ignore 'static' ",
+        "dev:assets": "cd src && WEBPACK_ENV=development webpack -w",
+        "build:assets": "cd src && WEBPACK_ENV=production webpack",
+        "build:server": "babel src --out-dir build --ignore 'src/assets','src/static','src/webpack.config.js'",
+        "copyAll": "cp -R src/static build && cp -R src/views build",
+        "build": "npm run build:server && npm run build:assets && npm run copyAll",
+        "prebuild": "rm -rf build",
+        "tunnel": "lt -h http://serverless.social -p 4000",
+        "start": "node build/init.js",
+        "prestart": "npm run build"
     },
     "devDependencies": {
         "autoprefixer": "^10.0.0",

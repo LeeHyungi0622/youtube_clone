@@ -40,7 +40,10 @@ export const postLogin = passport.authenticate("local", {
     successRedirect: routes.home
 });
 
-export const githubLogin = passport.authenticate("github");
+export const githubLogin = passport.authenticate("github", {
+    successFlash: "Welcome",
+    failureFlash: "Can't log in at this time"
+});
 
 // cb: passport로부터 우리에게 제공되는 것
 export const githubLoginCallback = async(_, __, profile, cb) => {
@@ -76,7 +79,10 @@ export const postGithubLogin = (req, res) => {
     res.redirect(routes.home);
 };
 
-export const facebookLogin = passport.authenticate("facebook");
+export const facebookLogin = passport.authenticate("facebook", {
+    successFlash: "Welcome",
+    failureFlash: "Can't log in at this time"
+});
 
 export const facebookLoginCallback = async(_, __, profile, cb) => {
     const {

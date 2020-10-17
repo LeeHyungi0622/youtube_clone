@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 dotenv.config();
 
 // 'mongodb://localhost:포트번호/Database이름'
-mongoose.connect(process.env.MONGO_URL, {
+mongoose.connect(process.env.MONGO_URL_PROD, {
     // 새로운 버전의 mongoose에서는 이런식으로 configuration을 보낼 수 있다.
     useUnifiedTopology: true,
     useNewUrlParser: true,
