@@ -19,7 +19,11 @@ passport.use(
     new GithubStrategy({
             clientID: process.env.GH_ID,
             clientSecret: process.env.GH_SECRET,
-            callbackURL: `http://localhost:${process.env.PORT}${routes.githubCallback}`
+            // callbackURL: `http://localhost:${process.env.PORT}${routes.githubCallback}`
+            // callbackURL: `https://gentle-reaches-53104.herokuapp.com${routes.githubCallback}`
+            callbackURL: process.env.PRODUCTION ?
+                `https://gentle-reaches-53104.herokuapp.com${routes.githubCallback}` :
+                `http://localhost:${process.env.PORT}${routes.githubCallback}`
         }, // Github page에서 되돌아왔을때의 처리
         githubLoginCallback
     )
