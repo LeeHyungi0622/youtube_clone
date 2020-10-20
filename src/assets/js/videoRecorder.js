@@ -26,13 +26,6 @@ const startRecording = () => {
     recordBtn.addEventListener("click", stopRecording);
 };
 
-const stopRecording = () => {
-    videoRecorder.stop();
-    recordBtn.removeEventListener("click", stopRecording);
-    recordBtn.addEventListener("click", getVideo);
-    recordBtn.innerHTML = "Start recording";
-};
-
 const getVideo = async() => {
     try {
         // media stream을 취득하기 위한 user의 접근권한을 기다리기 위해서 비동기 처리
@@ -53,6 +46,13 @@ const getVideo = async() => {
     } finally {
         recordBtn.removeEventListener("click", getVideo);
     }
+};
+
+const stopRecording = () => {
+    videoRecorder.stop();
+    recordBtn.removeEventListener("click", stopRecording);
+    recordBtn.addEventListener("click", getVideo);
+    recordBtn.innerHTML = "Start recording";
 };
 
 function init() {

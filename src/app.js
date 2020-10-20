@@ -7,6 +7,7 @@ import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
 import path from "path";
+import flash from "express-flash";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import userRouter from "./routers/userRouter";
@@ -46,6 +47,7 @@ app.use(
         store: new CookieStore({ mongooseConnection: mongoose.connection })
     })
 );
+app.use(flash());
 // cookieParser()로부터 내려와서 passport를 초기화
 app.use(passport.initialize());
 // passport가 스스로 쿠키를 들여다보고 쿠키 정보에 해당하는 사용자를 찾아줄 것이다.

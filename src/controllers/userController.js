@@ -11,8 +11,9 @@ export const postJoin = async(req, res, next) => {
         body: { name, email, password, password2 }
     } = req;
     if (password !== password2) {
-        // 400: bad request
+        // flash message
         req.flash("error", "Password don't match");
+        // 400: bad request
         res.status(400);
         res.render("join", { pageTitle: "Join" });
     } else {
@@ -37,7 +38,9 @@ export const getLogin = (req, res) =>
 
 export const postLogin = passport.authenticate("local", {
     failureRedirect: routes.login,
-    successRedirect: routes.home
+    successRedirect: routes.home,
+    successFlash: "Welcome",
+    failureFlash: "Can't log in. Check email and/or password."
 });
 
 export const githubLogin = passport.authenticate("github", {
@@ -115,15 +118,21 @@ export const postFacebookLogin = (req, res) => {
 };
 
 export const logout = (req, res) => {
+    req.flash("info", "Logged out, see you later");
     req.logout();
     //To Do: Process Log Out
     res.redirect(routes.home);
 };
 
-export const getMe = (req, res) => {
+export const getMe = async(req, res) => {
+    const { _id } = req.user;
+    try {
+        const user = await User.findById(_id).populate("videos");
+        res.render("userDetail", { pageTitle: "User Detail", user });
+    } catch (error) {
+        console.log(error);
+    }
     // user는 이미 로그인된 상태이므로, req.user 정보를 user 변수로 반환해준다.
-    console.log(req.user);
-    res.render("userDetail", { pageTitle: "User Detail", user: req.user });
 };
 
 export const userDetail = async(req, res) => {
@@ -136,6 +145,7 @@ export const userDetail = async(req, res) => {
         console.log(user);
         res.render("userDetail", { pageTitle: "User Detail", user });
     } catch (error) {
+        req.flash("error", "User not found");
         res.redirect(routes.home);
     }
 };
@@ -156,9 +166,10 @@ export const postEditProfile = async(req, res) => {
             // avatar 파일을 업데이트하지 않은 경우, 현재 로그인되어있는 사용자의 avatarUrl로 업데이트한다.
             avatarUrl: file ? file.location : req.user.avatarUrl
         });
+        req.flash("success", "Profile updated");
         res.redirect(routes.me);
     } catch (error) {
-        console.log(error);
+        req.flash("error", "Can't update profile");
         res.redirect("editProfile", { pageTitle: "Edit Profile" });
     }
 };
@@ -173,6 +184,7 @@ export const postChangePassword = async(req, res) => {
     try {
         console.log(oldPassword, newPassword, newPassword1);
         if (newPassword !== newPassword1) {
+            req.flash("error", "Password don't match");
             res.status(400);
             res.redirect(routes.changePassword);
             return;
@@ -182,7 +194,7 @@ export const postChangePassword = async(req, res) => {
         await req.user.changePassword(oldPassword, newPassword);
         res.redirect(routes.me);
     } catch (error) {
-        console.log(error);
+        req.flash("error", "Can't change password");
         res.status(400);
         res.redirect(`/users/${routes.changePassword}`);
     }
